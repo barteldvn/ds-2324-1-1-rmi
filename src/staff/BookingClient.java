@@ -9,8 +9,9 @@ import java.util.Set;
 
 import hotel.BookingDetail;
 import hotel.BookingManager;
+import shared.IBookingManager;
 
-public class BookingClient extends AbstractScriptedSimpleTest {
+public class BookingClient extends AbstractScriptedSimpleTest implements IBookingManager {
 
 	private BookingManager bm = null;
 
@@ -44,6 +45,7 @@ public class BookingClient extends AbstractScriptedSimpleTest {
 
 	@Override
 	public boolean isRoomAvailable(Integer roomNumber, LocalDate date) {
+
 		//Implement this method
 		return true;
 	}

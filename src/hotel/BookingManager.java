@@ -1,12 +1,14 @@
 package hotel;
 
+import shared.IBookingManager;
+
 import java.rmi.Remote;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BookingManager implements Remote {
+public class BookingManager implements IBookingManager {
 
 	private Room[] rooms;
 
