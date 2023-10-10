@@ -2,11 +2,9 @@ package hotel;
 
 import shared.IBookingManager;
 
-import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class BookingManager implements IBookingManager {
 
@@ -26,17 +24,42 @@ public class BookingManager implements IBookingManager {
 	}
 
 	public boolean isRoomAvailable(Integer roomNumber, LocalDate date) {
-		//implement this method
+		for (Room room : rooms) {
+			if (Objects.equals(room.getRoomNumber(), roomNumber)) {
+				for (BookingDetail bookingDetail : room.getBookings()) {
+					return bookingDetail.getDate() != date;
+				}
+			}
+		}
 		return false;
 	}
 
-	public void addBooking(BookingDetail bookingDetail) {
-		//implement this method
+	private Room getRoom(int roomNumber){
+		for (Room room : rooms) {
+			if (room.getRoomNumber() == roomNumber){
+				return room;
+			}
+		}
+		return null;
+	}
+
+	public void addBooking(BookingDetail bookingDetail) throws RemoteException {
+		Room room = getRoom(bookingDetail.getRoomNumber());
+		if (room == null) throw new RemoteException("Room does not exist");
+		if (!isRoomAvailable(bookingDetail.getRoomNumber(), bookingDetail.getDate())) throw new RemoteException("Room not available");
+		List<BookingDetail> bookings = room.getBookings();
+		bookings.add(bookingDetail);
 	}
 
 	public Set<Integer> getAvailableRooms(LocalDate date) {
-		//implement this method
-		return null;
+		Set <Integer> availableRooms = new HashSet<>();
+		for (Room room : rooms) {
+			if (isRoomAvailable(room.getRoomNumber(), date)){
+				availableRooms.add(room.getRoomNumber());
+			}
+
+		}
+		return availableRooms;
 	}
 
 	private static Room[] initializeRooms() {
