@@ -18,6 +18,9 @@ public class BookingClient {
 	public static void main(String[] args) throws Exception {
 		if (System.getSecurityManager() != null)
 			System.setSecurityManager(null);
+		if (args.length == 0) {
+			args = new String[] { "BookingManager" };
+		}
 		BookingClient client = new BookingClient(args);
 		client.run();
 	}
@@ -26,7 +29,7 @@ public class BookingClient {
 		bookingmanager = args[0];
 	}
 
-	private String bookingmanager;
+	private final String bookingmanager;
 
 	public void run() {
 		try {
@@ -34,7 +37,7 @@ public class BookingClient {
 				System.setSecurityManager(null);
 			Registry registry = LocateRegistry.getRegistry();
 
-			IBookingManager rental = (IBookingManager) registry.lookup(bookingmanager);
+			IBookingManager rental = (IBookingManager) registry.lookup("BookingManager");
 
 			System.out.println("All rooms " + rental.getAllRooms() + " found.");
 		} catch (NotBoundException ex) {
