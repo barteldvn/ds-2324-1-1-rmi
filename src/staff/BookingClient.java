@@ -1,5 +1,9 @@
 package staff;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -11,8 +15,19 @@ public class BookingClient extends AbstractScriptedSimpleTest {
 	private BookingManager bm = null;
 
 	public static void main(String[] args) throws Exception {
+
 		BookingClient client = new BookingClient();
 		client.run();
+	}
+
+	public void run() {
+		try {
+			if (System.getSecurityManager() != null)
+				System.setSecurityManager(null);
+			Registry registry = LocateRegistry.getRegistry();
+		} catch (RemoteException ex) {
+			System.err.println(ex.getMessage());
+		}
 	}
 
 	/***************
