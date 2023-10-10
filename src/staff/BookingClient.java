@@ -11,58 +11,37 @@ import hotel.BookingDetail;
 import hotel.BookingManager;
 import shared.IBookingManager;
 
-public class BookingClient extends AbstractScriptedSimpleTest implements IBookingManager {
+public class BookingClient {
 
 	private BookingManager bm = null;
 
 	public static void main(String[] args) throws Exception {
-
-		BookingClient client = new BookingClient();
+		if (System.getSecurityManager() != null)
+			System.setSecurityManager(null);
+		BookingClient client = new BookingClient(args);
 		client.run();
 	}
+
+	public BookingClient(String[] args) {
+		bookingmanager = args[0];
+	}
+
+	private String bookingmanager;
 
 	public void run() {
 		try {
 			if (System.getSecurityManager() != null)
 				System.setSecurityManager(null);
 			Registry registry = LocateRegistry.getRegistry();
+
+			IBookingManager rental = (IBookingManager) registry.lookup(bookingmanager);
+
+			System.out.println("All rooms " + rental.getAllRooms() + " found.");
+		} catch (NotBoundException ex) {
+			System.err.println("Could not find car rental company with given name.");
 		} catch (RemoteException ex) {
 			System.err.println(ex.getMessage());
 		}
 	}
 
-	/***************
-	 * CONSTRUCTOR *
-	 ***************/
-	public BookingClient() {
-		try {
-			//Look up the registered remote instance
-			bm = new BookingManager();
-		} catch (Exception exp) {
-			exp.printStackTrace();
-		}
-	}
-
-	@Override
-	public boolean isRoomAvailable(Integer roomNumber, LocalDate date) {
-
-		//Implement this method
-		return true;
-	}
-
-	@Override
-	public void addBooking(BookingDetail bookingDetail) {
-		//Implement this method
-	}
-
-	@Override
-	public Set<Integer> getAvailableRooms(LocalDate date) {
-		//Implement this method
-		return null;
-	}
-
-	@Override
-	public Set<Integer> getAllRooms() {
-		return bm.getAllRooms();
-	}
 }
