@@ -1,11 +1,12 @@
 package hotel;
 
+import java.rmi.Remote;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BookingManager {
+public class BookingManager implements Remote {
 
 	private Room[] rooms;
 
